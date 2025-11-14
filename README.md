@@ -61,6 +61,24 @@ chmod +x test-docker.sh
 ./test-docker.sh
 ```
 
+### Integration Test Example
+
+A complete integration test example is available in `examples/integration-test/`. This example demonstrates the module-proxy working as a sidecar to the Echo service using Docker Compose.
+
+```bash
+# Navigate to the integration test example
+cd examples/integration-test
+
+# Start services and run tests
+make test
+
+# Or manually
+docker-compose up -d
+./test-integration.sh
+```
+
+See [examples/integration-test/README.md](examples/integration-test/README.md) for detailed instructions.
+
 ## Configuration
 
 The proxy service can be configured using environment variables:

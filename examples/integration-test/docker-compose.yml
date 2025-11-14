@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Echo service - the backend module that module-proxy will connect to
+  echo-service:
+    image: ghcr.io/ai-pipestream/echo:5cdcff2eb40f1d6b9f184f4c228a566fefc1a94b
+    container_name: echo-service
+    ports:
+      - "9091:9090"  # Expose echo service gRPC port for debugging
+    networks:
+      - integration-test
+    healthcheck:
+      test: ["CMD", "grpcurl", "-plaintext", "localhost:9090", "list"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    environment:
+      - QUARKUS_LOG_LEVEL=INFO
+      - QUARKUS_GRPC_SERVER_PORT=9090
+
+  # Module proxy - connects to echo-service as a sidecar
+  module-proxy:
+    image: rokkon/proxy-module:latest
+    container_name: module-proxy
+    ports:
+      - "39100:39100"  # Proxy HTTP/gRPC port
+      - "9090:9090"    # Alternative gRPC port
+    networks:
+      - integration-test
+    depends_on:
+      echo-service:
+        condition: service_healthy
+    environment:
+      # Point proxy to the echo service
+      - MODULE_HOST=echo-service
+      - MODULE_PORT=9090
+      - PROXY_PORT=39100
+      - QUARKUS_HTTP_PORT=39100
+      - QUARKUS_LOG_LEVEL=INFO
+      - MAX_RETRIES=10
+      - STARTUP_TIMEOUT=60
+      - CHECK_INTERVAL=5
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:39100/q/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
+
+networks:
+  integration-test:
+    name: module-proxy-integration-test
+    driver: bridge

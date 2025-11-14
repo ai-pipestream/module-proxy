@@ -1,0 +1,7 @@
+# Docker volumes and temporary files
+.env
+*.log
+
+# Test output
+test-results/
+reports/
