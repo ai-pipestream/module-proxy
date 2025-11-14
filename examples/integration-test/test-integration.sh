@@ -58,15 +58,15 @@ while [ $WAITED -lt $MAX_WAIT ]; do
         break
     fi
 
-    if [ $WAITED -eq $((MAX_WAIT - 5)) ]; then
+    sleep 5
+    WAITED=$((WAITED + 5))
+    echo -n "."
+
+    if [ $WAITED -ge $MAX_WAIT ]; then
         print_error "Echo service failed to become healthy"
         $DOCKER_COMPOSE logs echo-service
         exit 1
     fi
-
-    sleep 5
-    WAITED=$((WAITED + 5))
-    echo -n "."
 done
 
 if [ $WAITED -ge $MAX_WAIT ]; then
