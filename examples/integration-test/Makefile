@@ -1,4 +1,4 @@
-.PHONY: help start stop test logs clean rebuild
+.PHONY: help start stop test logs clean rebuild logs-proxy logs-echo status health shell-proxy shell-echo
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
