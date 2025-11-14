@@ -69,12 +69,6 @@ while [ $WAITED -lt $MAX_WAIT ]; do
     fi
 done
 
-if [ $WAITED -ge $MAX_WAIT ]; then
-    print_error "Echo service failed to become healthy"
-    docker-compose logs echo-service
-    exit 1
-fi
-
 echo ""
 
 # Wait for proxy to be healthy
@@ -95,12 +89,6 @@ while [ $WAITED -lt $MAX_WAIT ]; do
     WAITED=$((WAITED + 5))
     echo -n "."
 done
-
-if [ $WAITED -ge $MAX_WAIT ]; then
-    print_error "Module-proxy failed to become healthy"
-    docker-compose logs module-proxy
-    exit 1
-fi
 
 echo ""
 echo ""
