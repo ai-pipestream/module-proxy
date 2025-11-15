@@ -92,7 +92,7 @@ compileTestJava {
 // Publishing configuration
 publishing {
     publications {
-        maven(MavenPublication) { MavenPublication publication ->
+        maven(MavenPublication) {
             from components.java
             pom {
                 name.set('Platform Registration Service')

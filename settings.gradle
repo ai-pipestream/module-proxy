@@ -4,7 +4,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'module-parser'
+rootProject.name = 'module-proxy'
 
 dependencyResolutionManagement {
 //    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
